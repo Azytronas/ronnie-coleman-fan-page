@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<h1>Log in to DownrightDarius.tk</h1>
+<form class="site-form"  action="{% url 'accounts:login' %}" method="post" enctype='multipart/form-data'>
+    {% csrf_token %}
+    {{ form }}
+    {{ success_message }}
+    <input type="submit" value="Login">
+</body>
+</html>

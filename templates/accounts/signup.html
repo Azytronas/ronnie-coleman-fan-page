@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Accounts</title>
+</head>
+<body>
+<h1>Sign up to DownrightDarius.tk</h1>
+<form class="site-form"  action="/accounts/signup/" method="post" enctype='multipart/form-data'>
+    {% csrf_token %}
+    {{ form }}
+    {{ success_message }}
+    <input type="submit" value="Sign up">
+</form>
+</body>
+</html>

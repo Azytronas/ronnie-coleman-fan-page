@@ -1,0 +1,8 @@
+body {
+    background: white url("images/a real rain.jpg");
+    color: white
+}
+img {
+    width: 100%;
+    height: auto;
+}

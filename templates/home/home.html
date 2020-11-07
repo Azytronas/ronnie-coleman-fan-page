@@ -1,0 +1,65 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<div style="position: relative;">
+    <div style="position: absolute; top: 5px; right: 20px;">
+        <form class="logout-link" action="{% url "accounts:logout"%}" method="post">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+        </div>
+</div>
+<ul>
+    <li>
+        <a href="{% url 'accounts:signup' %}">Sign up to DownrightDarius.tk</a>
+    </li>
+    <li>
+        <a href="{% url 'music:index' %}">Music</a>
+    </li>
+    <li>
+        <a href="{% url 'polls:index' %}">Polls</a>
+    </li>
+</ul>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/VS9IhcD1YYE" frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    <p><audio controls><source src="/media/songs/Richard_Stallman_Free_software_Song.mp3"
+                            type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio></p>
+<p></p>
+    <div class="lyrics">
+	<p style="text-align: center">Join us now and share the software;<br />
+     You'll be
+     free, <a href="http://stallman.org/articles/on-hacking.html" target="_blank">hackers</a>,
+     you'll be free.<br />
+     Join us now and share the software;<br />
+     You'll be free, hackers, you'll be free.</p>
+
+        <p style="text-align: center">Hoarders can get piles of money,<br />
+     That is true, hackers, that is true.<br />
+     But they cannot help their neighbors;<br />
+     That's not good, hackers, that's not good.</p>
+
+     <p style="text-align: center">When we have enough free software<br />
+     At our call, hackers, at our call,<br />
+     We'll kick out those dirty licenses<br />
+     Ever more, hackers, ever more.</p>
+
+     <p style="text-align: center">Join us now and share the software;<br />
+     You'll be free, hackers, you'll be free.<br />
+     Join us now and share the software;<br />
+     You'll be free, hackers, you'll be free.</p>
+
+			</div>
+
+</body>
+</html>

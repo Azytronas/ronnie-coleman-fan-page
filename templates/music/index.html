@@ -1,0 +1,37 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'music/style.css' %}">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Music</title>
+</head>
+
+<body style="background-color:grey;">
+
+{% block content %}
+    <h1 style="font-size: 20px;">Upload</h1>
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+        {{ form.as_p }}
+    <button type="submit">Submit</button>
+    </form>
+{% endblock %}
+<p>{{ success_message }}</p>
+
+{% if song_list %}
+    <ul>
+    {% for song in song_list %}
+
+        <li> <a href=" {% url 'music:details' song.name %} ">
+            {{ song.name }} </a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+No songs available
+{% endif %}
+
+</body>
+</html>
