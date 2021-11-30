@@ -1,8 +1,10 @@
 from django.shortcuts import get_object_or_404, render
 from .models import Song
 from .forms import SongForm
+from django.contrib.auth.decorators import login_required
 
 
+@login_required()
 def index(request):
     song_list = Song.objects.all()
     if request.method == "POST":

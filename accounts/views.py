@@ -1,39 +1,45 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, authenticate, get_user_model
+from .forms import LoginForm, RegisterForm
+from django import forms
+
+User = get_user_model()
 
 
 def signup_view(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
+    form = RegisterForm(request.POST or None)
+    if form.is_valid():
+        username = form.cleaned_data.get("username")
+        password = form.cleaned_data.get("password")
+        confirm_password = form.cleaned_data.get("confirm_password")
+        user = User.objects.create_user(username, "", password)
+        print(user.password)
+        if user is not None:
             login(request, user)
-            success_message = 'Successfully created new account!'
-            context = {'form': form, 'success_message': success_message}
-            return render(request, "accounts/signup.html", context)
-    else:
-        form = UserCreationForm()
-    context = {'form': form}
-    return render(request, 'accounts/signup.html', context)
+            return redirect("/")
+        else:
+            request.session['register_error'] = 1  # 1 == True
+    return render(request, "forms.html", {"form": form})
 
 
 def login_view(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
+    if request.user.is_authenticated:
+        return redirect("/")
+    form = LoginForm(request.POST or None)
+    if form.is_valid():
+        username = form.cleaned_data.get("username")
+        password = form.cleaned_data.get("password")
+        print(password)
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
             login(request, user)
-            success_message = "Sucessfully logged in!"
-            context = {'form': form, 'success_message': success_message}
-            return render(request, "accounts/login.html", context)
-    else:
-        form = AuthenticationForm()
-    context = {'form': form}
-    return render(request, 'accounts/login.html', context)
+            return redirect("/")
+        if user is None:
+            request.session['invalid_user'] = 1
+    return render(request, "forms.html", {"form": form})
 
 
 def logout_view(request):
-    if request.method == 'POST':
-        logout(request)
-        return redirect('accounts:login')
+    logout(request)
+    print("logged out")
+    return redirect("/")

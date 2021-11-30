@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Music</title>
+    <title> {% block title %} Music {% endblock %}</title>
 </head>
 
 <body style="background-color:grey;">
@@ -18,7 +18,7 @@
         {{ form.as_p }}
     <button type="submit">Submit</button>
     </form>
-{% endblock %}
+
 <p>{{ success_message }}</p>
 
 {% if song_list %}
@@ -32,6 +32,6 @@
 {% else %}
 No songs available
 {% endif %}
-
+{% endblock %}
 </body>
 </html>
