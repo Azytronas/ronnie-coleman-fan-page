@@ -2,10 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>Chat Room</title>
+    <title>{{ room_name }}</title>
 </head>
 <body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+    <textarea id="chat-log" cols="100" rows="20" readonly></textarea><br>
     <input id="chat-message-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
@@ -25,6 +25,13 @@
             document.querySelector('#chat-log').value += (data.message + '\n');
         };
 
+        chatSocket.onopen = function(e) {
+            chatSocket.send(JSON.stringify({
+                'type': 'load_log',
+                'message': ''
+            }));
+        }
+
         chatSocket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');
         };
@@ -39,14 +46,15 @@
         document.querySelector('#chat-message-submit').onclick = function(e) {
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
-            if (message == '')
+            if (message === '')
             {
                 messageInputDom.value = '';
             }
             else
             {
               chatSocket.send(JSON.stringify({
-                'message': message
+                 'type': 'chat_message',
+                 'message': message
             }));
             }
             messageInputDom.value = '';
