@@ -1,7 +1,6 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from channels.auth import UserLazyObject
-from datetime import datetime
 from asgiref.sync import async_to_sync
 from .models import Chat, Message
 from django.contrib.auth import get_user_model
@@ -24,13 +23,12 @@ class ChatConsumer(WebsocketConsumer):
             new_chat.in_chat.add(new_participant)
         else:
             chat = Chat.objects.get(name=self.room_name)
-            if not isinstance(new_participant, UserLazyObject):
-                chat.in_chat.add(new_participant)
-            async_to_sync(self.channel_layer.group_add)(
-                self.room_group_name,
-                self.channel_name
+        if not isinstance(new_participant, UserLazyObject):
+            chat.in_chat.add(new_participant)
+        async_to_sync(self.channel_layer.group_add)(
+            self.room_group_name,
+            self.channel_name
         )
-
         self.accept()
 
     def disconnect(self, close_code):
@@ -71,6 +69,9 @@ class ChatConsumer(WebsocketConsumer):
 
     def load_log(self, event):
         curr_chat = Chat.objects.get(name=self.room_name)
+        self.send(text_data=json.dumps({
+            'message': 'Welcome to the {} chat room. Loading log...\n'.format(self.room_name)
+        }))
         for message in curr_chat.messages.all():
             log = normalize(message)
             self.send(text_data=json.dumps({
