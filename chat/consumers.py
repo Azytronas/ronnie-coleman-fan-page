@@ -20,7 +20,6 @@ class ChatConsumer(WebsocketConsumer):
 
         if Chat.objects.filter(name=self.room_name).count() == 0:
             new_chat = Chat.objects.create(name=self.room_name)
-            new_chat.in_chat.add(new_participant)
         else:
             chat = Chat.objects.get(name=self.room_name)
         if not isinstance(new_participant, UserLazyObject):
@@ -60,6 +59,8 @@ class ChatConsumer(WebsocketConsumer):
         message = event['message']
         curr_chat = Chat.objects.get(name=self.room_name)
         author = self.scope['user']
+        if isinstance(author, UserLazyObject):
+            author = User.objects.get(username='Anonymous')
         new_message = Message.objects.create(sent_by=author, content=message, sent_in=curr_chat)
         norm_message = normalize(new_message)
         # Send message to WebSocket
